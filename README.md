@@ -1,5 +1,5 @@
 # From-Redundancy-to-Relevance
-Code for paper:From Redundancy to Relevance: Enhancing Explainability in Multimodal Large Language Models
+Code for paper:An Information Flow Perspective for Exploring Large Vision Language Models on Reasoning Tasks
 ## Smooth-CAM results for ScienceQA (Complex reasoning)
 ![image](https://github.com/zhangbaijin/From-Redundancy-to-Relevance/blob/main/grad-llm.png)
 
