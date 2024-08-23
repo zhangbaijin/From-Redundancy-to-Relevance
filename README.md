@@ -1,5 +1,6 @@
 # From-Redundancy-to-Relevance
 Code for paper:An Information Flow Perspective for Exploring Large Vision Language Models on Reasoning Tasks
+Arxiv ![Paper](https://arxiv.org/abs/2406.06579)
 ## Smooth-CAM results for ScienceQA (Complex reasoning)
 ![image](https://github.com/zhangbaijin/From-Redundancy-to-Relevance/blob/main/grad-llm.png)
 
