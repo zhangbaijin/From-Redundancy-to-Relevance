@@ -6,7 +6,7 @@ The paper is under review, we will release code in Oct.
 
 
 ## Citation
-```
+``````bibtex
 @article{zhang2024redundancy,
   title={From Redundancy to Relevance: Enhancing Explainability in Multimodal Large Language Models},
   author={Zhang, Xiaofeng and Shen, Chen and Yuan, Xiaosong and Yan, Shaotian and Xie, Liang and Wang, Wenxiao and Gu, Chaochen and Tang, Hao and Ye, Jieping},
