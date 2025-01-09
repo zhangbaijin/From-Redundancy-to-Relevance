@@ -9,15 +9,16 @@ The paper is under review, we will release code in Oct.
 
 ## Setup
 
-The main implementation of OPERA is in `transformers-4.29.2/src/transformers/generation/utils.py`.
+The main implementation of Our is in `transformers-4.29.2/src/transformers/generation/utils.py`.
 
-So it is convenient to use OPERA decoding by just installing our modified `transformers` package.
+So it is convenient to use Our decoding by just installing our modified `transformers` package.
 ```
 conda env create -f environment.yml
 conda activate opera
 python -m pip install -e transformers-4.29.2
 ```
-#### Note: to implement OPERA on other version of transformers, you can follow the steps as the follows:
+
+#### Note: to implement on other version of transformers, you can follow the steps as the follows:
 - Find the file at `transformers-4.29.2/src/transformers/generation/utils.py`.
 - Add the arguments in `transformers.generate` function [here](https://github.com/shikiw/OPERA/blob/aa968c7501f4d3d8362f4b3bcab855024f4da5f6/transformers-4.29.2/src/transformers/generation/utils.py#L1156-L1162).
 - Add the code in `transformers.generate` function [here](https://github.com/shikiw/OPERA/blob/aa968c7501f4d3d8362f4b3bcab855024f4da5f6/transformers-4.29.2/src/transformers/generation/utils.py#L1619-L1665).
