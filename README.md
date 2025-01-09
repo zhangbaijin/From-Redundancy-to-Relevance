@@ -14,7 +14,7 @@ The main implementation of Our is in `transformers-4.29.2/src/transformers/gener
 So it is convenient to use Our decoding by just installing our modified `transformers` package.
 ```
 conda env create -f environment.yml
-conda activate opera
+conda activate redundancy
 python -m pip install -e transformers-4.29.2
 ```
 
