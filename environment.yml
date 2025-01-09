@@ -1,4 +1,4 @@
-name: opera
+name: redundancy
 channels:
   - pytorch
   - defaults
