@@ -88,6 +88,8 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
 
         hidden_states = outputs[0]
         logits = self.lm_head(hidden_states)
+        hidden_states.retain_grad()
+        logits.retain_grad()
 
         loss = None
         if labels is not None:
@@ -96,8 +98,8 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
             shift_labels = labels[..., 1:].contiguous()
             # Flatten the tokens
             loss_fct = CrossEntropyLoss()
-            shift_logits = shift_logits.view(-1, self.config.vocab_size)
-            shift_labels = shift_labels.view(-1)
+            shift_logits = shift_logits.reshape(-1, self.config.vocab_size)
+            shift_labels = shift_labels.reshape(-1)
             # Enable model/pipeline parallelism
             shift_labels = shift_labels.to(shift_logits.device)
             loss = loss_fct(shift_logits, shift_labels)

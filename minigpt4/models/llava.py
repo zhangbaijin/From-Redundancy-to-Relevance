@@ -132,7 +132,7 @@ class LLaVa(BaseModel):
 
         return {"loss": loss}
 
-    @torch.no_grad()
+    # @torch.no_grad()
     def generate(
         self, 
         samples,
@@ -147,7 +147,119 @@ class LLaVa(BaseModel):
         num_captions=1,
         temperature=1,
         output_attentions=False,
-        return_dict_in_generate=False,
+        # ours
+        # opera_decoding=False,
+        # key_position=None,
+        # scale_factor=1.0,
+        # threshold=1,
+        # num_attn_candidates=5,
+        # penalty_weights=1.0,
+    ):
+        self.llama_tokenizer.padding_side = "left"
+
+        image = samples["image"]
+
+        instruction = samples["prompt"] if "prompt" in samples else None
+
+        bs = image.size(0)
+
+        if isinstance(instruction, str):
+            instruction = [instruction] * bs
+        else:
+            assert len(instruction) == bs, "The number of prompts must be equal to the batch size."
+
+        instruction = [self.system_message + p for p in instruction]
+
+        chunks_before, chunks_after = [], []
+        for p in instruction:
+            chunk_before, chunk_after = p.split('<ImageHere>')
+            chunks_before.append(chunk_before)
+            chunks_after.append(chunk_after)
+
+        tokens_before = self.llama_tokenizer(
+            chunks_before,
+            return_tensors="pt",
+            padding="longest",
+            add_special_tokens=False
+        ).to(image.device).input_ids
+
+        tokens_after = self.llama_tokenizer(
+            chunks_after,
+            return_tensors="pt",
+            padding="longest",
+            add_special_tokens=False
+        ).to(image.device).input_ids
+
+        bos = torch.ones([bs, 1],
+                         dtype=torch.int64,
+                         device=image.device) * self.llama_tokenizer.bos_token_id
+
+        image_token = torch.ones([bs, 1],
+                         dtype=torch.int64,
+                         device=image.device) * IMAGE_TOKEN_INDEX
+
+        with self.maybe_autocast():
+            input_ids = torch.cat([bos, tokens_before, image_token, tokens_after], dim=1)
+
+            # if key_position is None:
+            #     key_position = {
+            #         "image_start": tokens_before.shape[1]+1, 
+            #         "image_end": tokens_before.shape[1]+NUM_IMAGE_TOKENS, 
+            #         "response_start": input_ids.shape[1]+NUM_IMAGE_TOKENS-1,
+            #     }
+
+            output_ids = self.llama_model.generate(
+                input_ids=input_ids,
+                use_cache=True,
+                do_sample=use_nucleus_sampling,
+                top_p=top_p,
+                temperature=temperature,
+                num_beams=num_beams,
+                max_new_tokens=max_new_tokens,
+                # max_length=512,
+                pad_token_id=self.llama_tokenizer.pad_token_id,
+                bos_token_id=self.llama_tokenizer.bos_token_id,
+                eos_token_id=self.llama_tokenizer.eos_token_id,
+                # repetition_penalty=repetition_penalty,
+                # length_penalty=length_penalty,
+                # num_return_sequences=num_captions,
+                images=image,
+                output_attentions=output_attentions,
+                # opera
+                # opera_decoding=opera_decoding,
+                # key_position=key_position,
+                # scale_factor=scale_factor,
+                # threshold=threshold,
+                # num_attn_candidates=num_attn_candidates,
+                # penalty_weights=penalty_weights,
+            )
+        
+        input_token_len = input_ids.shape[1]
+
+        n_diff_input_output = (input_ids != output_ids[:, :input_token_len]).sum().item()
+
+        if n_diff_input_output > 0:
+            print(f'[Warning] {n_diff_input_output} output_ids are not the same as the input_ids')
+        output_text = self.llama_tokenizer.batch_decode(output_ids[:, input_token_len:], skip_special_tokens=True)
+        output_text = [text.split('###')[0].strip() for text in output_text]
+        return (output_text, input_token_len, output_ids)
+        
+        #return output_ids
+
+    def generate_output(
+        self, 
+        samples,
+        use_nucleus_sampling=False,
+        num_beams=5,
+        max_length=256,
+        min_length=1,
+        max_new_tokens=300,
+        top_p=0.9,
+        repetition_penalty=1.0,
+        length_penalty=1,
+        num_captions=1,
+        temperature=1,
+        output_attentions=False,
         # ours
         opera_decoding=False,
         key_position=None,
@@ -209,41 +321,14 @@ class LLaVa(BaseModel):
                     "response_start": input_ids.shape[1]+NUM_IMAGE_TOKENS-1,
                 }
 
-            output_ids = self.llama_model.generate(
+            output_ids = self.llama_model(
                 input_ids=input_ids,
                 use_cache=True,
-                do_sample=use_nucleus_sampling,
-                top_p=top_p,
-                temperature=temperature,
-                num_beams=num_beams,
-                max_new_tokens=max_new_tokens,
-                # max_length=512,
-                pad_token_id=self.llama_tokenizer.pad_token_id,
-                bos_token_id=self.llama_tokenizer.bos_token_id,
-                eos_token_id=self.llama_tokenizer.eos_token_id,
-                # repetition_penalty=repetition_penalty,
-                # length_penalty=length_penalty,
-                # num_return_sequences=num_captions,
                 images=image,
                 output_attentions=output_attentions,
-                return_dict_in_generate=return_dict_in_generate,
-                # opera
-                opera_decoding=opera_decoding,
-                key_position=key_position,
-                scale_factor=scale_factor,
-                threshold=threshold,
-                num_attn_candidates=num_attn_candidates,
-                penalty_weights=penalty_weights,
             )
-
-        input_token_len = input_ids.shape[1]
-        n_diff_input_output = (input_ids != output_ids[:, :input_token_len]).sum().item()
-        if n_diff_input_output > 0:
-            print(f'[Warning] {n_diff_input_output} output_ids are not the same as the input_ids')
-        output_text = self.llama_tokenizer.batch_decode(output_ids[:, input_token_len:], skip_special_tokens=True)
-        output_text = [text.split('###')[0].strip() for text in output_text]
-        return output_text
-
+        
+        return output_ids
 
     def embed_tokens(self, token_ids):
         if hasattr(self.llama_model.base_model, 'model'): ## lora wrapped model

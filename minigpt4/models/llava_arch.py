@@ -54,7 +54,7 @@ class CLIPVisionTower(nn.Module):
     def load_model(self):
         self.image_processor = CLIPImageProcessor.from_pretrained(self.vision_tower_name)
         self.vision_tower = CLIPVisionModel.from_pretrained(self.vision_tower_name)
-        self.vision_tower.requires_grad_(False)
+        # self.vision_tower.requires_grad_(False)
 
         self.is_loaded = True
 
@@ -68,7 +68,7 @@ class CLIPVisionTower(nn.Module):
             raise ValueError(f'Unexpected select feature: {self.select_feature}')
         return image_features
 
-    @torch.no_grad()
+    # @torch.no_grad()
     def forward(self, images):
         if type(images) is list:
             image_features = []
@@ -238,6 +238,7 @@ class LlavaMetaForCausalLM(ABC):
     def encode_images(self, images):
         image_features = self.get_model().get_vision_tower()(images)
         image_features = self.get_model().mm_projector(image_features)
+        image_features.retain_grad()
         return image_features
 
     def prepare_inputs_labels_for_multimodal(
@@ -257,7 +258,7 @@ class LlavaMetaForCausalLM(ABC):
             image_features = [x.flatten(0, 1) for x in image_features]
         else:
             image_features = self.encode_images(images)
-
+            image_features.retain_grad()
         new_input_embeds = []
         new_labels = [] if labels is not None else None
         cur_image_idx = 0
@@ -267,6 +268,7 @@ class LlavaMetaForCausalLM(ABC):
                 # FIXME: this is a hacky fix, for deepspeed zero3 to work
                 half_len = cur_input_ids.shape[0] // 2
                 cur_image_features = image_features[cur_image_idx]
+                cur_image_features.retain_grad()
                 cur_input_embeds_1 = self.get_model().embed_tokens(cur_input_ids[:half_len])
                 cur_input_embeds_2 = self.get_model().embed_tokens(cur_input_ids[half_len:])
                 cur_input_embeds = torch.cat([cur_input_embeds_1, cur_image_features[0:0], cur_input_embeds_2], dim=0)
@@ -283,6 +285,7 @@ class LlavaMetaForCausalLM(ABC):
                 assert cur_labels.shape == cur_input_ids.shape
             while image_token_indices.numel() > 0:
                 cur_image_features = image_features[cur_image_idx]
+                cur_image_features.retain_grad()
                 image_token_start = image_token_indices[0]
                 if getattr(self.config, 'tune_mm_mlp_adapter', False) and getattr(self.config, 'mm_use_im_start_end', False):
                     cur_new_input_embeds.append(self.get_model().embed_tokens(cur_input_ids[:image_token_start-1]).detach())
@@ -297,6 +300,7 @@ class LlavaMetaForCausalLM(ABC):
                 else:
                     cur_new_input_embeds.append(self.get_model().embed_tokens(cur_input_ids[:image_token_start]))
                     cur_new_input_embeds.append(cur_image_features)
+                    cur_new_input_embeds[0].retain_grad()
                     if labels is not None:
                         cur_new_labels.append(cur_labels[:image_token_start])
                         cur_new_labels.append(torch.full((cur_image_features.shape[0],), IGNORE_INDEX, device=labels.device, dtype=labels.dtype))
@@ -329,6 +333,7 @@ class LlavaMetaForCausalLM(ABC):
                 cur_new_embed = torch.cat((cur_new_embed, torch.zeros((max_len - cur_new_embed.shape[0], cur_new_embed.shape[1]), dtype=cur_new_embed.dtype, device=cur_new_embed.device)), dim=0)
                 new_input_embeds_align.append(cur_new_embed)
             new_input_embeds = torch.stack(new_input_embeds_align, dim=0)
+            new_input_embeds.retain_grad()
 
             if labels is not None:
                 new_labels_align = []
@@ -349,6 +354,7 @@ class LlavaMetaForCausalLM(ABC):
                 assert attention_mask.shape == new_labels.shape
         else:
             new_input_embeds = torch.stack(new_input_embeds, dim=0)
+            new_input_embeds.retain_grad()
             if labels is not None:
                 new_labels  = torch.stack(new_labels, dim=0)
 
