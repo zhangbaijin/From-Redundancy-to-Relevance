@@ -4,7 +4,7 @@ The paper is under review, we will release code in Oct.
 
 [Paper](https://arxiv.org/abs/2406.06579)
 
-![image](https://github.com/zhangbaijin/Massive-activations-VLMs/blob/main/massive.png)
+![image](https://github.com/zhangbaijin/From-Redundancy-to-Relevance/blob/main/horse.png)
 
 
 ## Setup
