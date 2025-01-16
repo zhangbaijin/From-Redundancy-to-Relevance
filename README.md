@@ -17,7 +17,7 @@ conda env create -f environment.yml
 conda activate redundancy
 python -m pip install -e transformers-4.29.2
 ```
-#### Our modify
+#### Our modify in llava.py/llava_arch.py/llava_llama.py
 ```
 retain_grad()
 required_grad()=True 
