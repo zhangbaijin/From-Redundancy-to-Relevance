@@ -1,5 +1,5 @@
 # From-Redundancy-to-Relevance
-Code for paper:An Information Flow Perspective for Exploring Large Vision Language Models on Reasoning Tasks.
+[NAACL 2025] An Information Flow Perspective for Exploring Large Vision Language Models on Reasoning Tasks.
 The paper is under review, we will release code in Oct.
 
 [Paper](https://arxiv.org/abs/2406.06579)
