@@ -7,9 +7,6 @@
 
 ## Setup
 
-The main implementation of Our is in `transformers-4.29.2/src/transformers/generation/utils.py`.
-
-So it is convenient to use Our decoding by just installing our modified `transformers` package.
 ```
 conda env create -f environment.yml
 conda activate redundancy
@@ -20,14 +17,6 @@ python -m pip install -e transformers-4.29.2
 retain_grad()
 required_grad()=True 
 ```
-
-
-#### OPERA modify
- Note: to implement on other version of transformers, you can follow the steps as the follows:
-- Find the file at `transformers-4.29.2/src/transformers/generation/utils.py`.
-- Add the arguments in `transformers.generate` function [here](https://github.com/shikiw/OPERA/blob/aa968c7501f4d3d8362f4b3bcab855024f4da5f6/transformers-4.29.2/src/transformers/generation/utils.py#L1156-L1162).
-- Add the code in `transformers.generate` function [here](https://github.com/shikiw/OPERA/blob/aa968c7501f4d3d8362f4b3bcab855024f4da5f6/transformers-4.29.2/src/transformers/generation/utils.py#L1619-L1665).
-- Copy and paste the `opera_decoding` function [here](https://github.com/shikiw/OPERA/blob/aa968c7501f4d3d8362f4b3bcab855024f4da5f6/transformers-4.29.2/src/transformers/generation/utils.py#L3116-L3674).
 
 ## Evaluation
 
