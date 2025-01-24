@@ -42,9 +42,9 @@ Besides, it needs you to prepare the following checkpoints of 7B base models:
 ``````bibtex
 @article{zhang2024redundancy,
   title={From Redundancy to Relevance: Enhancing Explainability in Multimodal Large Language Models},
-  author={Zhang, Xiaofeng and Shen, Chen and Yuan, Xiaosong and Yan, Shaotian and Xie, Liang and Wang, Wenxiao and Gu, Chaochen and Tang, Hao and Ye, Jieping},
-  journal={arXiv preprint arXiv:2406.06579},
-  year={2024}
+  author={Zhang, Xiaofeng and  Quan, Yihao and Shen, Chen and Yuan, Xiaosong and Yan, Shaotian and Xie, Liang and Wang, Wenxiao and Gu, Chaochen and Tang, Hao and Ye, Jieping},
+  journal={Annual Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics},
+  year={2025}
 }
 
 
