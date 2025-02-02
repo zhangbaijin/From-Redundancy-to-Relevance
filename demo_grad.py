@@ -93,10 +93,6 @@ class GradCAM():
             num_beams=1,  # 使用 beam size 为 1
             max_new_tokens=128,  # 生成的最大新 token 数量
             output_attentions=True,  # 请求返回注意力权重
-            # opera_decoding=True,
-            # scale_factor=50,
-            # threshold=15.0,
-            # num_attn_candidates=5,
         )
         # 对目标类进行反向传播
 
@@ -192,9 +188,6 @@ args = parser.parse_known_args()[0]
 
 
 args.model = "llava-1.5"
-# args.model = "instructblip"
-# args.model = "minigpt4"
-# args.model = "shikra"
 args.gpu_id = "0"
 #args.gpu_id_2 = 1
 args.batch_size = 1
@@ -230,9 +223,6 @@ norm = transforms.Normalize(mean, std)
 import re
 import seaborn as sns
 image_path = "/root/autodl-tmp/SQA/test/23/image.png"
-# image_path = "/root/autodl-tmp/OPERA/image/95.jpg"
-# image_path = '/root/autodl-tmp/OPERA/shiwulian.jpg'
-# image_path = "/root/autodl-tmp/OPERA/sqa_images/test/170/image.png"
 raw_image = Image.open(image_path).resize((336,336))
 plt.imshow(raw_image)
 plt.show()
@@ -243,29 +233,19 @@ image = image.to(device)
 # question = [{"content":"<image>\nQuestion:Please describe the image."}]
 question = [{"content":"<image>\nContext: Below is a food web from a tundra ecosystem in Nunavut, a territory in Northern Canada.\nA food web models how the matter eaten by organisms moves through an ecosystem. The arrows in a food web represent how matter moves between organisms in an ecosystem.\nQuestion: Which of these organisms contains matter that was once part of the lichen?\nOptions: (A) bilberry (B) mushroom\nAnswer with the option's letter from the given choices directly."}]
 
-# question = [{"content":"<image>\nContext: Below is a food web from a tundra ecosystem in Nunavut, a territory in Northern Canada.\nA food web models how the matter eaten by organisms moves through an ecosystem. The arrows in a food web represent how matter moves between organisms in an ecosystem.\nQuestion: where is the container"}]
-
-# question = [{"content":"<image> Context:The image features four different sports-related objects, each with a unique crown-like decoration. The objects include a turtle, a basketball, a crown, and a tennis ball. The turtle is positioned on the left side of the image, while the basketball is located on the right side. The crown is placed in the middle of the image, and the tennis ball is situated at the bottom right corner. The arrangement of these objects creates a visually interesting and diverse scene. Select the best answer. Question: Which property do these three objects have in common? Options: (A) shiny (B) slippery (C) opaque Answer with the option's letter from the given choices directly."}]
-# question = [{"content":"<image>\n Question:Is there any person in this image?"}]
-
 prompt_str = '\n'.join([item['content'] for item in question])
 template = INSTRUCTION_TEMPLATE[args.model]
-# 现在 prompt_str 是一个字符串，可以用它来替换模板中的 <question> 占位符
 qu = template.replace("<question>", prompt_str)
 
 
 # with torch.inference_mode():
 # model.eval()
 out, input_token_len, output_ids = model.generate(
-    {"image": norm(image), "prompt": qu},  # 传入图像和序列化的prompt
-    use_nucleus_sampling=False,  # 关闭核采样（top-p采样
-    num_beams=1,  # 使用beam size为1，意味着不进行束搜索
-    max_new_tokens=128,  # 生成的最大新token数量
-    output_attentions=True,  # 请求返回注意力权重
-    # opera_decoding=True,
-    # scale_factor=50,
-    # threshold=15.0
-    # num_attn_candidates=5,
+    {"image": norm(image), "prompt": qu},  
+    use_nucleus_sampling=False, 
+    num_beams=1, 
+    max_new_tokens=128, 
+    output_attentions=True,  
 )
 # breakpoint()
 # print(out[0])
@@ -292,16 +272,3 @@ for i in range (28,32):
     qu_append = out[0]
     qu = qu + qu_append
 
-# with torch.inference_mode():
-#     with torch.no_grad():
-#         out = model.generate_output(
-#             {"image": norm(image), "prompt":qu},  # 输入字典包含更新后的提问
-#             num_beams=1,  # 使用 beam size 为 1
-#             max_new_tokens=1024,  # 生成的最大新 token 数量
-#             output_attentions=True,  # 请求返回注意力权重
-#             # opera_decoding=True,
-#             # scale_factor=50,
-#             # threshold=15.0,
-#             # num_attn_candidates=5,
-#         )
-# print(out[0])
