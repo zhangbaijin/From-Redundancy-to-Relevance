@@ -1,8 +1,7 @@
 # 🔥🔥🔥 [NAACL 2025] From redundancy to relevance: Enhancing explainability in multimodal large language models
 
 [Paper](https://arxiv.org/abs/2406.06579)
-
-![image](https://github.com/zhangbaijin/From-Redundancy-to-Relevance/blob/main/horse.png)
+![image](https://github.com/zhangbaijin/From-Redundancy-to-Relevance/blob/main/information-flow.png)
 
 
 ## Setup
@@ -32,6 +31,8 @@ Besides, it needs you to prepare the following checkpoints of 7B base models:
 ```
 python demo_grad.py
 ```
+![image](https://github.com/zhangbaijin/From-Redundancy-to-Relevance/blob/main/horse.png)
+
 
 ## Citation
 ``````bibtex
