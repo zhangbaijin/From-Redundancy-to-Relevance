@@ -1,4 +1,4 @@
-# [NAACL 2025] From redundancy to relevance: Enhancing explainability in multimodal large language models
+# 🔥🔥🔥 [NAACL 2025] From redundancy to relevance: Enhancing explainability in multimodal large language models
 
 [Paper](https://arxiv.org/abs/2406.06579)
 
@@ -26,6 +26,7 @@ Besides, it needs you to prepare the following checkpoints of 7B base models:
 
 - Download [LLaVA-1.5 merged 7B model](https://huggingface.co/liuhaotian/llava-v1.5-7b) and specify it at [Line 14](https://github.com/shikiw/OPERA/blob/bf18aa9c409f28b31168b0f71ebf8457ae8063d5/eval_configs/llava-1.5_eval.yaml#L14) of `eval_configs/llava-1.5_eval.yaml`.
 
+🔥🔥🔥
 ## visualization
 
 ```
