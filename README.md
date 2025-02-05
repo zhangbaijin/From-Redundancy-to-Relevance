@@ -29,7 +29,7 @@ Besides, it needs you to prepare the following checkpoints of 7B base models:
 ## Visualization 🔥🔥🔥
 
 ```
-python demo_grad.py
+python demo_smooth_grad_threshold.py
 ```
 ![image](https://github.com/zhangbaijin/From-Redundancy-to-Relevance/blob/main/horse.png)
 
