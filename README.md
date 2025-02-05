@@ -35,13 +35,15 @@ python demo_smooth_grad_threshold.py
 
 
 ## Citation
-``````bibtex
+```bibtex
 @article{zhang2024redundancy,
   title={From Redundancy to Relevance: Enhancing Explainability in Multimodal Large Language Models},
   author={Zhang, Xiaofeng and  Quan, Yihao and Shen, Chen and Yuan, Xiaosong and Yan, Shaotian and Xie, Liang and Wang, Wenxiao and Gu, Chaochen and Tang, Hao and Ye, Jieping},
   journal={Annual Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics},
   year={2025}
 }
+```
+## Acknowledgement
 
-
+This repo is built on [LLaVA](https://github.com/haotian-liu/LLaVA) (models), [OPERA](https://github.com/shikiw/OPERA) (CHAIR evaluation) and [FastV](https://github.com/pkunlp-icler/FastV). Many thanks for their efforts. The use of our code should also follow the original licenses.
 
