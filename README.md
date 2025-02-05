@@ -1,6 +1,9 @@
 # 🔥🔥🔥 [NAACL 2025] From redundancy to relevance: Enhancing explainability in multimodal large language models
 
-[Paper](https://arxiv.org/abs/2406.06579)
+[![License: MIT](https://img.shields.io/badge/License-MIT-g.svg)](https://opensource.org/licenses/MIT)
+[![Arxiv](https://img.shields.io/badge/arXiv-2311.17911-B21A1B)](https://arxiv.org/abs/2406.06579)
+[![GitHub Stars](https://img.shields.io/github/stars/zhangbaijin/From-Redundancy-to-Relevance?style=social)](zhangbaijin/From-Redundancy-to-Relevance)
+
 ![image](https://github.com/zhangbaijin/From-Redundancy-to-Relevance/blob/main/information-flow.png)
 
 
