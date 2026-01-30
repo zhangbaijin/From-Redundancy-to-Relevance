@@ -46,5 +46,5 @@ python demo_smooth_grad_threshold.py
 ```
 ## Acknowledgement
 
-This repo is built on [LLaVA](https://github.com/haotian-liu/LLaVA) (models), [OPERA](https://github.com/shikiw/OPERA) (CHAIR evaluation) and [FastV](https://github.com/pkunlp-icler/FastV) (Image Token Truncation). Many thanks for their efforts. The use of our code should also follow the original licenses.
+This repo is built on [LLaVA](https://github.com/haotian-liu/LLaVA) (models), [Qwen2.5-VL]([https://github.com/shikiw/OPER](https://github.com/QwenLM/Qwen3-VL)) (CHAIR evaluation) and [Label words]([https://github.com/pkunlp-icler/FastV](https://github.com/lancopku/label-words-are-anchors)). Many thanks for their efforts. The use of our code should also follow the original licenses.
 
